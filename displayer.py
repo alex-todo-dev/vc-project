@@ -16,6 +16,10 @@ APPLY_BLUR = True
 
 def display_process(input_queue: Queue) -> None:
 
+    os.makedirs(RESULTS_FRAME_FOLDER, exist_ok=True)
+    window_name = "Live Video Display"
+    cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
+
     print(f"[{DISSPLAY_MODULE_NAME}] Starting display process...")
     while True:
         frame_data = input_queue.get()
@@ -61,6 +65,13 @@ def display_process(input_queue: Queue) -> None:
         # if cv2.waitKey(1) & 0xFF == ord('q'):
         #     break
         
+         # Show frame live
+        cv2.imshow(window_name, frame)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            print(f"[{DISSPLAY_MODULE_NAME}] User requested exit.")
+            break
+
+
          # Save frame to disk
         frame_filename = os.path.join(RESULTS_FRAME_FOLDER, f"frame_{frame_data['frame_id']:05d}.jpg")
         cv2.imwrite(frame_filename, frame)
