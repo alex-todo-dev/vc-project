@@ -6,6 +6,7 @@ from multiprocessing import Queue
 from env_loader import DISSPLAY_MODULE_NAME
 from env_loader import RESULTS_FRAME_FOLDER
 import os
+from player import play_saved_frames
 
 # Optional: toggle blurring
 APPLY_BLUR = True
@@ -25,7 +26,7 @@ def display_process(input_queue: Queue) -> None:
                 break
         
 
-        print(f"[{DISSPLAY_MODULE_NAME}] Received data: {frame_data.get('frame_id')}")
+        # print(f"[{DISSPLAY_MODULE_NAME}] Received data: {frame_data.get('frame_id')}")
 
         frame = frame_data["frame"]
         detections = frame_data.get("detections", [])
@@ -65,7 +66,7 @@ def display_process(input_queue: Queue) -> None:
         cv2.imwrite(frame_filename, frame)
 
         
-
+    # play_saved_frames()
     print(f"[{DISSPLAY_MODULE_NAME}] Display process finished.")
 
 

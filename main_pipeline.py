@@ -39,9 +39,15 @@ def start_main_pipeline(video_path: str) -> dict:
 
     # Wait for the frame streamer process to finish
     frame_streamer_process.join()
+    # wait for all detection workers to finish
+    for p in detect_workers:
+        p["process"].join()
+    # Wait for the display process to finish
+    display_process_process.join()
 
-    print (f'[{MAIN_PIPELINE_MODULE_NAME}] Vide processing completed for: {video_path}')
-    
+    print (f'[{MAIN_PIPELINE_MODULE_NAME}] processing completed for: {video_path}')
+    print(f'[{MAIN_PIPELINE_MODULE_NAME}] All processes have finished.')
+    print(f'READY FOR NEXT VIDEO')
     return {"status": "success", "message": f'[{MAIN_PIPELINE_MODULE_NAME}] Video processing completed for: {video_path}'}
 
 
