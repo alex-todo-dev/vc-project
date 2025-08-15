@@ -32,8 +32,18 @@ def display_process(input_queue: Queue) -> None:
         video_time_sec = frame_data.get("video_time_sec", 0.0)
 
         # Draw detections (rectangles)
+        # Blur or draw rectangles on detections
         for (x, y, w, h) in detections:
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            if APPLY_BLUR:
+                # Extract region of interest (ROI)
+                roi = frame[y:y+h, x:x+w]
+                # Apply Gaussian blur to ROI
+                blurred_roi = cv2.GaussianBlur(roi, (25, 25), 0)
+                # Replace original region with blurred
+                frame[y:y+h, x:x+w] = blurred_roi
+            else:
+                # Just draw rectangle if blur not enabled
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
         # Add timestamp (top-left corner)
         timestamp_str = time.strftime("%Y-%m-%d %H:%M:%S")
